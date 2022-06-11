@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'awards',
     'bootstrap4',
     'cloudinary',
+    'registration',
 
 ]
 
