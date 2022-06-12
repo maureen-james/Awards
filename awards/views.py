@@ -3,6 +3,7 @@ from django.shortcuts import get_object_or_404, render,redirect
 from django.contrib.auth.decorators import login_required
 from django.http  import HttpResponse,Http404
 from awards.forms import ProjectForm,UpdateProfileForm,RatingForm
+from awards.permissions import IsAdminOrReadOnly
 from .models import Project,Profile,Rating 
 from django.contrib import messages
 from django.contrib.auth.models import User
@@ -108,10 +109,12 @@ class ProjectList(APIView):
     def get(self, request, format=None):
         all_projects = Project.objects.all()
         serializers = ProjectSerializer(all_projects, many=True)
+        permission_classes = (IsAdminOrReadOnly,)
         return Response(serializers.data)
 class ProfileList(APIView):
     def get(self, request, format=None):
         all_profiles = Profile.objects.all()
         serializers = ProfileSerializer(all_profiles, many=True)
+        permission_classes = (IsAdminOrReadOnly,)
         return Response(serializers.data)          
    
