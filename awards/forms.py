@@ -1,4 +1,4 @@
-from .models import Project
+from .models import Profile, Project
 from django import forms
 
 class ProjectForm(forms.ModelForm):
@@ -8,3 +8,8 @@ class ProjectForm(forms.ModelForm):
         widgets= {
             'url':forms.Textarea(attrs={'rows':2,})
         }
+
+class UpdateProfileForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['bio','profile_photo']        
