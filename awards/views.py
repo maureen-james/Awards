@@ -60,7 +60,7 @@ def project_details(request, project_id):
   except Project.DoesNotExist:
     raise Http404
   
-  return render(request, 'pro_details.html', {"details":project_details, "rates":project_rates, "form":form})
+  return render(request, 'project_details.html', {"details":project_details, "rates":project_rates, "form":form})
 @login_required(login_url='/accounts/login/')
 def search_results(request):
   form=ProjectForm()
