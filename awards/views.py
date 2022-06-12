@@ -6,6 +6,9 @@ from awards.forms import ProjectForm,UpdateProfileForm,RatingForm
 from .models import Project,Profile,Rating 
 from django.contrib import messages
 from django.contrib.auth.models import User
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from .serializer import ProfileSerializer,ProjectSerializer
 
 # Create your views here.
 
@@ -99,5 +102,16 @@ def submit_rates(request, project_id):
         form.save()
         messages.success(request, 'Your rating has been posted')
         
-        return redirect(url)    
+        return redirect(url)  
+
+class ProjectList(APIView):
+    def get(self, request, format=None):
+        all_projects = Project.objects.all()
+        serializers = ProjectSerializer(all_projects, many=True)
+        return Response(serializers.data)
+class ProfileList(APIView):
+    def get(self, request, format=None):
+        all_profiles = Profile.objects.all()
+        serializers = ProfileSerializer(all_profiles, many=True)
+        return Response(serializers.data)          
    
