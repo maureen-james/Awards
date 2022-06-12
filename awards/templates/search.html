@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div>
+{% if projects %}
+  <h2 class="text-center">Found {{projects|length}} result(s) of the searched title <b>{{message}}</b></h2>
+{% else %}
+  <h2 class="text-center">Found 0 results associated with the title <b>{{message}}</b></h2>
+{% endif %}
+</div>
+
+<div class="container">
+
+  <div class="row text-center">
+    {% if projects %}
+    {% for project in projects %}
+    <div class="col-xs-6 col-md-3 my-3">
+      <a href="{% url 'projectdetails' project_id=project.id%}" class="thumbnail">
+        <p><em>{{project.title}}</em></p>
+        <img src="{{project.image.url}}" class="img-fluid" alt="Project Display Screenshot">
+      </a>
+    </div>
+    {% endfor %}
+    {% endif %}
+  </div>
+</div>
+
+
+{% endblock %}

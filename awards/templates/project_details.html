@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% load bootstrap4%}
+{% load mathfilters %}
+
+
+{% block content %}
+
+<div class="container-fluid">
+  
+  <div class="row">
+    <h2 style="text-align: center;"><strong>{{details.title}}</strong></h2>
+
+    <div class="col-md-5 ">
+      <div class="text-center">
+        <img src="{{details.image.url}}" class="img-fluid detailimage" alt="project display">
+        <br><br>
+      <h2 class="text-center">Description</h2>
+      <p class="text-center">{{details.description}}</p>
+      <p>Posted By: <strong>{{details.user}}</strong></p>
+      <p><strong>Posted on: {{details.posted_date}}</strong></p>
+     
+      Link:</Link><a href="{{details.url}}" target="_blank"><strong> Link</strong></a>
+      </div> 
+      
+    </div>
+  <div class="col-md-2"></div>
+    <div class="col-md-5" id="rates">
+      <form action="{%url 'submitrates' details.id %}" method="post">
+        {% csrf_token %}
+        <h2 class="text-center">Rate the project</h2>
+
+        {% bootstrap_form form %}
+
+        <div class="text-center">
+          <input type="submit" class="btn btn-sm btn-dark" value="post rating">
+        </div>
+      </form>
+
+    </div>
+  </div>
+
+  <div class="mt-4">
+    <h2 class="text-center">Ratings</h2>
+
+    <div class="table-responsive" id ="table">
+      <table class="table text-center">
+        <thead>
+          <tr>
+            <th scope="col">Voted By</th>
+            <th scope="col">design score</th>
+            <th scope="col">usability score</th>
+            <th scope="col">content score</th>
+            <th scope="col">Avg Score</th>
+          </tr>
+        </thead>
+        {%for rate in rates%}
+        <tbody>
+          <tr>
+            <td>{{rate.user}}</td>
+            <td>{{rate.design}}</td>
+            <td>{{rate.userbility}}</td>
+            <td>{{rate.content}}</td>
+            <td>{{ rate.design|add:rate.userbility|add:rate.content|div:3}}</td>
+          </tr>
+        </tbody>
+        {%endfor%}
+      </table>
+    </div>
+    
+  </div>
+
+</div>
+
+{% endblock%}
