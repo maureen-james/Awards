@@ -3,6 +3,7 @@ from cloudinary.models import CloudinaryField
 from django.contrib.auth.models import User
 from django.dispatch import receiver
 from django.db.models.signals import post_save
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 # Create your models here.
 class Project(models.Model):
@@ -78,5 +79,44 @@ class Profile(models.Model):
     @classmethod
     def search_profiles(cls, search_term):
         profiles = cls.objects.filter(user__username__icontains=search_term).all()
-        return profiles            
+        return profiles 
+
+
+class Rating(models.Model):
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    design = models.IntegerField(default=0, validators=[
+                                       MaxValueValidator(10),
+                                       MinValueValidator(1)
+                                     ])
+    userbility = models.IntegerField(default=0,validators=[
+                                       MaxValueValidator(10),
+                                       MinValueValidator(1)
+                                     ])
+    content = models.IntegerField(default=0,validators=[
+                                       MaxValueValidator(10),
+                                       MinValueValidator(1)
+                                     ])
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    average_rate = models.IntegerField(default=0, validators=[
+                                    MaxValueValidator(10),
+                                    MinValueValidator(1)
+                                  ])
+
+
+   
+    def update(self):
+        self.save()
+
+    def save_ratings(self):
+        self.save()
+    def delete_ratings(self):
+        self.delete()
+        
+    @classmethod
+    def filter_by_id(cls, id):
+        rating = Rating.objects.filter(id=id).first()
+        return rating
+
+    def __str__(self):
+        return self.user.username                   
 

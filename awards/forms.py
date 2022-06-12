@@ -1,4 +1,4 @@
-from .models import Profile, Project
+from .models import Profile, Project,Rating
 from django import forms
 
 class ProjectForm(forms.ModelForm):
@@ -12,4 +12,11 @@ class ProjectForm(forms.ModelForm):
 class UpdateProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ['bio','profile_photo']        
+        fields = ['bio','profile_photo'] 
+
+class RatingForm(forms.ModelForm):
+  class Meta:
+    model = Rating
+    fields = ['design', 'userbility', 'content']
+    def save(self, commit=True):
+        instance = super().save(commit=False)               
