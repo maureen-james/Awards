@@ -1,3 +1,9 @@
 #bgimage{
-    background-image: url(/static/photos/arrow.jpg);
+    background-image: url(/static/photos/badge.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 50vh;
+}
+.input-group{
+    margin: 0 auto;
 }
