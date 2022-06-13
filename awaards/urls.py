@@ -13,18 +13,30 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+# from django.contrib import admin
+# from django.urls import include, path
+# from django.contrib.auth import views as auth_views
+# from rest_framework.authtoken.views import obtain_auth_token
+
+
+# urlpatterns = [
+#     path('admin/', admin.site.urls),
+#     path('', include ('awards.urls')),
+#     path('accounts/', include('registration.backends.default.urls')),
+#     path('logout/', auth_views.LogoutView.as_view(template_name='registration/logout.html'), name='logout'),
+#     path( 'login/',auth_views.LoginView.as_view(template_name="useraccounts/login.html"), name="login"),
+#     path('api-token-auth/', obtain_auth_token)
+    
+# ]
 from django.contrib import admin
-from django.urls import include, path
-from django.contrib.auth import views as auth_views
-from rest_framework.authtoken.views import obtain_auth_token
+from django.urls import path
+from django.conf.urls import include
+from django.contrib.auth import views
 
 
 urlpatterns = [
+    path('', include('awards.urls')),
     path('admin/', admin.site.urls),
-    path('', include ('awards.urls')),
-    path('accounts/', include('registration.backends.default.urls')),
-    path('logout/', auth_views.LogoutView.as_view(template_name='registration/logout.html'), name='logout'),
-    path( 'login/',auth_views.LoginView.as_view(template_name="useraccounts/login.html"), name="login"),
-    path('api-token-auth/', obtain_auth_token)
-    
+    path('accounts/', include('registration.backends.simple.urls')),
+    path('logout/', views.LogoutView.as_view (next_page = '/'))
 ]
