@@ -1,7 +1,7 @@
 {%extends 'base.html'%}
 {% block content %}
 {{block.super}}
-<div class="container-fluid" id="profile">
+<div class="container" id="profile">
 
     <div class="row">
         <div class="col-md-1"></div>
@@ -21,8 +21,13 @@
             <p>No bio</p>
             {%endif%}
 
-            <a type="button" href="/user/update/profile" class="btn btn-primary" data-bs-target="#updateprofile" style="margin-top: 10px;">Update
-                Profile</a><br><br>
+            <li class="nav-item">
+                <a class="nav-link " href="{% url 'edit_profile' %}">
+                    <i class="fas fa-cog"></i> Edit Profile</a>
+            </li>
+
+            <!-- <a type="button" href="/user/profile/" class="btn btn-primary" data-bs-target="#updateprofile" style="margin-top: 10px;">Update
+                Profile</a><br><br> -->
         </div>
         <div class="col-md-5"></div>
 

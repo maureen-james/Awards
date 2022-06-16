@@ -2,7 +2,7 @@
 <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #ffffff;">
   <div class="container">
     <a class="navbar-brand" href="/">
-      <h1> Awaards </h1>
+      <h1> BRAVO </h1>
     </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
       aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -13,19 +13,8 @@
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="/">Home</a>
         </li>
-        <li class="dropdown mx-4 btn btn-sm ">
-          <a href="#" class="dropdown-toggle btn btn-dark" data-toggle="dropdown" role="button" aria-expanded="false">APIs <span class="caret"></span></a>
-  
-          <ul class="dropdown-menu" role="menu">
-            <li class="btn btn-default">
-              <a href="api/project/" target="_blank">Projects API</a>
-            </li>
-            <li class="btn btn-default">
-              <a href="api/profile/" target="_blank">Profile API</a>
-            </li>
-  
-          </ul>
-        </li>
+        
+
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="/user/{{request.user.id}}">Profile</a>
         </li>
@@ -42,12 +31,25 @@
           <a class="nav-link active" aria-current="page" href="/accounts/register/">Sign up</a>
         </li>
         {% endif %}
-        <li class="nav-item float-end">
-          <a type="button" class="btn btn-outline-warning" aria-current="page" data-bs-toggle="modal"
-            data-bs-target="#postproject">post project</a>
-        </li>
 
+        <li class="btn btn-outline-warning">
+          <a  class="nav-link active" aria-current="page" href="/profile/addproject" target="_blank">Add project</a>
+        </li>
+       
       </ul>
+      <li class="dropdown mx-4 btn btn-sm ">
+        <a href="#" class="dropdown-toggle btn btn-dark" data-toggle="dropdown" role="button" aria-expanded="false">APIs <span class="caret"></span></a>
+
+        <ul class="dropdown-menu" role="menu">
+          <li class="btn btn-default">
+            <a href="api/project/" target="_blank">Projects API</a>
+          </li>
+          <li class="btn btn-default">
+            <a href="api/profile/" target="_blank">Profile API</a>
+          </li>
+
+        </ul>
+      </li>
      
       <h5 class="navbar-text text-dark">
         Welcome {{ user.username }}
@@ -57,29 +59,3 @@
   </div>
   
 </nav>
-
-<!-- Modal -->
-<div class="modal fade" id="postproject" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <form method="POST" enctype="multipart/form-data">
-          {% csrf_token %}
-          {% bootstrap_form form %}
-          
-          <button type="submit" class="btn btn-primary">Save changes</button>
-        
-          
-          </form> 
-       
-     
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-       
-      </div>
-    </div>
-  </div>
-</div>

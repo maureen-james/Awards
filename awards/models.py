@@ -4,6 +4,9 @@ from django.contrib.auth.models import User
 from django.dispatch import receiver
 from django.db.models.signals import post_save
 from django.core.validators import MaxValueValidator, MinValueValidator
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 # Create your models here.
 class Project(models.Model):

@@ -1,8 +1,9 @@
 from django.shortcuts import render
+from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404, render,redirect
 from django.contrib.auth.decorators import login_required
 from django.http  import HttpResponse,Http404
-from awards.forms import ProjectForm,UpdateProfileForm,RatingForm
+from awards.forms import AddProjectForm, ProjectForm,DetailsForm,RatingForm
 from awards.permissions import IsAdminOrReadOnly
 from .models import Project,Profile,Rating 
 from django.contrib import messages
@@ -12,13 +13,13 @@ from rest_framework.views import APIView
 from .serializer import ProfileSerializer,ProjectSerializer
 
 # Create your views here.
-
+User = get_user_model()
 
 def welcome(request):
     project=Project.objects.all()
     if request.method=='POST':
         current_user=request.user
-        form=ProjectForm(request.POST,request.FILES)
+        form=AddProjectForm(request.POST,request.FILES)
         if form.is_valid():
             project=form.save(commit=False)
             project.user=current_user
@@ -26,10 +27,10 @@ def welcome(request):
             messages.success(request,('Project was posted successfully!'))
             return redirect('welcome')
     else:
-            form=ProjectForm()
+            form=AddProjectForm()
     return render(request,'index.html',{'form':form,'projects':project})
 @login_required(login_url='/accounts/login/')
-def profile(request,user_id):
+def profile(request, user_id):
 
     current_user=get_object_or_404(User,id=user_id)
     # current_user = request.user
@@ -38,20 +39,23 @@ def profile(request,user_id):
     form=ProjectForm()
     return render(request, 'profile.html', {"projects": projects,'form':form, "profile": profile})
   
-def update_profile(request):
-  	#Get the profile
-    current_user=request.user
-    profile = Profile.objects.filter(id=current_user.id).first()
+
+def edit_profile(request):
+    current_user = request.user
     if request.method == 'POST':
-        profileform = UpdateProfileForm(request.POST,request.FILES,instance=profile)
-        if  profileform.is_valid:
-            profileform.save(commit=False)
-            profileform.user=request.user
-            profileform.save()
-            return redirect('profile')
+        form = DetailsForm(request.POST, request.FILES)
+        if form.is_valid():
+                Profile.objects.filter(id=current_user.profile.id).update(bio=form.cleaned_data["bio"])
+                profile = Profile.objects.filter(id=current_user.profile.id).first()
+
+                profile.save()
+        return redirect('profile')
+
     else:
-        form=UpdateProfileForm()
-    return render(request,'update_profile.html',{'form':form})
+        form = DetailsForm()
+    
+    return render(request, 'update_profile.html',{"form": form})
+
 
 @login_required(login_url='/accounts/login/')
 def project_details(request, project_id):
@@ -64,9 +68,10 @@ def project_details(request, project_id):
     raise Http404
   
   return render(request, 'project_details.html', {"details":project_details, "rates":project_rates, "form":form})
+
 @login_required(login_url='/accounts/login/')
 def search_results(request):
-  form=ProjectForm()
+  form=AddProjectForm()
   if 'search' in request.GET and request.GET['search']:
     
     title_search = request.GET.get('search')
@@ -81,29 +86,49 @@ def search_results(request):
     return render(request, 'search.html', {"message":message})
 
 @login_required(login_url='/accounts/login/')
-def submit_rates(request, project_id):
-  url = request.META.get('HTTP_REFERER')
-  if request.method == 'POST':
-    try:
-      rating = Rating.objects.get(user__id=request.user.id, project__id=project_id)
-      form = RatingForm(request.POST, instance=rating)
-      form.save()
-      messages.success(request, 'Your rating has been updated')
-      return redirect(url)
-    except Rating.DoesNotExist:
-      form = RatingForm(request.POST)
-      if form.is_valid():
-        # rating_data = Votes()
-        design = form.cleaned_data.get('design')
-        userbility = form.cleaned_data.get('userbility')
-        content = form.cleaned_data.get('content')
-        # form.instance.Avg_score = design_score
-        form.instance.project_id=project_id
-        form.instance.user_id = request.user.id
-        form.save()
-        messages.success(request, 'Your rating has been posted')
-        
-        return redirect(url)  
+def add_project(request):
+    if request.method == "POST":
+        form = AddProjectForm(request.POST, request.FILES)
+        if form.is_valid():
+            project = form.save(commit=False)
+            project.save()
+        return redirect('welcome')
+    else:
+        form = ProjectForm()
+    return render(request, 'add_project.html', {"form": form})    
+ 
+
+@login_required(login_url="/accounts/login/")
+def rate_project(request, id):
+    if request.method == "POST":
+
+        project = Project.objects.get(id=id)
+        current_user = request.user
+
+        design_rate=request.POST["design"]
+        usability_rate=request.POST["usability"]
+        content_rate=request.POST["content"]
+
+        Rating.objects.create(
+            project=project,
+            user=current_user,
+            design_rate=design_rate,
+            usability_rate=usability_rate,
+            content_rate=content_rate,
+            avg_rate=round((float(design_rate)+float(usability_rate)+float(content_rate))/3,2),
+        )
+
+       
+        avg_rating= (int(design_rate)+int(usability_rate)+int(content_rate))/3
+
+      
+        project.rate=avg_rating
+        project.update_project()
+
+        return render(request, "project.html", {"success": "Project Rated Successfully", "project": project, "rating": Rating.objects.filter(project=project)})
+    else:
+        project = Project.objects.get(id=id)
+        return render(request, "project.html", {"danger": "Project Rating Failed", "project": project})
 
 class ProjectList(APIView):
     def get(self, request, format=None):

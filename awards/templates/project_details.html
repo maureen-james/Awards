@@ -25,7 +25,7 @@
     </div>
   <div class="col-md-2"></div>
     <div class="col-md-5" id="rates">
-      <form action="{%url 'submitrates' details.id %}" method="post">
+      <form action="{%url 'rate_project' details.id %}" method="post">
         {% csrf_token %}
         <h2 class="text-center">Rate the project</h2>
 
