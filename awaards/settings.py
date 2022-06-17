@@ -40,7 +40,7 @@ SECRET_KEY = 'django-insecure-kn%n(!5p!rlzjik9(_fjhcsuh(hechqlt=z1%n@5c6gh#!t8ia
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+# ALLOWED_HOSTS = []
 MODE=config("MODE", default="dev")
 # SECRET_KEY=config('SECRET_KEY')
 # DEBUG=config('DEBUG', default=False, cast=bool)
@@ -129,7 +129,7 @@ else:
 db_from_env = dj_database_url.config(conn_max_age=500)
 DATABASES['default'].update(db_from_env)
 
-# ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv())   
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv())   
 
 
 
