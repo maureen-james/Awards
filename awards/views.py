@@ -91,11 +91,18 @@ def add_project(request):
         form = AddProjectForm(request.POST, request.FILES)
         if form.is_valid():
             project = form.save(commit=False)
+            form.instance.user = request.user
             project.save()
         return redirect('welcome')
     else:
         form = ProjectForm()
-    return render(request, 'add_project.html', {"form": form})    
+    return render(request, 'add_project.html', {"form": form})
+
+@login_required(login_url="/accounts/login/")
+def delete_project(request):
+    project = Project.objects.get(id=id)
+    project.delete_project()
+    return redirect("/profile", {"success": "Deleted Project Successfully"})        
  
 
 @login_required(login_url="/accounts/login/")

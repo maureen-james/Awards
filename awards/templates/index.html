@@ -9,16 +9,22 @@
             <div class="row">
                 <div class="col-md-4"></div>
                 <div class="col-md-4">
-                    <form class="navbar-form" role="search" method="" action="{% url 'search_results' %}"
-                        style="margin-right:150px;">
+                    <form class="navbar-form mx-auto" role="search" method="" action="{% url 'search_results' %}">
 
                         {% csrf_token %}
                         <div class="input-group">
+                            
                             <input type="text" class="form-control" placeholder="Search By Project Name" name="search">
                             <div class="input-group-btn">
                                 <button class="btn btn-warning" style="margin-left: 5px;" type="submit">Search</button>
                             </div>
-                        </div>
+                        
+                        </div> 
+                        <!-- <div class="input-group">
+                            <form class="mx-2 my-auto d-inline mx-auto col-md-3">
+                            <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
+                            <button type="button" class="btn btn-outline-primary">search</button>
+                          </div> -->
                     </form>
                 </div>
                 <div class="col-md-4"></div>
@@ -30,7 +36,7 @@
         <h5 style="text-align: center;color:darkblue;">PROJECTS PORTAL</h5>
         {% if projects %}
         {% for project in projects %}
-        <div class="col-md-4">
+        <div class="col-md-6">
             <a href="{% url 'projectdetails' project_id=project.id%}" class="thumbnail">
                 <div class="card">
                     <div class="card-header">
@@ -49,11 +55,8 @@
         <p>There are no Projects to show</p>
         {% endif %}
 
-        <div class="col-md-4"></div>
+        <div class="col-md-6"></div>
 
-
-
-        <div class="col-md-4"></div>
     </div>
 </div>
 {% endblock %}
