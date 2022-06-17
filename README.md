@@ -4,6 +4,8 @@
 # Description  
 This project allows users to post their projects for other users to rate according to design, usability and content 
 
+### live link : https://bravoawards.herokuapp.com/
+
 ## User Story  
 
 * A user can view posted projects and their details.  
@@ -20,7 +22,7 @@ To get the project .......
 
 ##### Cloning the repository:  
  ```bash 
-https://github.com/AjedidahMwanzia/awards
+https://github.com/maureen-james/awards
 ```
 ##### Navigate into the folder and install requirements  
  ```bash 
@@ -54,8 +56,8 @@ python manage.py makemigrations database name
 Open the application on your browser `127.0.0.1:8000`.  
 
  ### Api Endpoints
- * 
- * 
+ * profileapi
+ * projectapi
 
 
 

@@ -29,56 +29,59 @@ def welcome(request):
     else:
             form=AddProjectForm()
     return render(request,'index.html',{'form':form,'projects':project})
-# @login_required(login_url='/accounts/login/')
-# def profile(request, user_id):
 
-#     current_user=get_object_or_404(User,id=user_id)
-#     # current_user = request.user
-#     projects = Project.objects.filter(user=current_user)
-#     profile = Profile.objects.filter(id = current_user.id).first()
-    
-#     return render(request, 'profile.html', {"projects": projects,'form':form, "profile": profile})
-
-@login_required(login_url="/accounts/login/")
-def profile(request):
-    current_user = request.user
-    profile = Profile.objects.filter(user_id=current_user.id).first()
-    project = Project.objects.filter(user_id=current_user.id).all() 
-    form=ProjectForm()
-    return render(request, "profile.html", {"profile": profile, 'form':form,"project": project})    
-  
-
-# def edit_profile(request):
-#     current_user = request.user
-#     if request.method == 'POST':
-#         form = DetailsForm(request.POST, request.FILES)
-#         if form.is_valid():
-#                 Profile.objects.filter(id=current_user.profile.id).update(bio=form.cleaned_data["bio"])
-#                 profile = Profile.objects.filter(id=current_user.profile.id).first()
-
-#                 profile.save()
-#         return redirect('profile')
-
-#     else:
-#         form = DetailsForm()
-    
-#     return render(request, 'update_profile.html',{"form": form})
 
 @login_required(login_url='/accounts/login/')
-def edit_profile(request,id):
-    user = User.objects.get(id=id)
-    profile = Profile.objects.get(user_id = user)
-    form = DetailsForm(instance=profile)
-    if request.method == "POST":
-            form = DetailsForm(request.POST,request.FILES,instance=profile)
-            if form.is_valid():  
-                
-                profile = form.save(commit=False)
+def profile(request, user_id):
+
+    current_user=get_object_or_404(User,id=user_id)
+    # current_user = request.user
+    projects = Project.objects.filter(user=current_user)
+    profile = Profile.objects.filter(id = current_user.id).first()
+    form=ProjectForm()
+    
+    return render(request, 'profile.html', {"projects": projects,'form':form, "profile": profile})
+
+# @login_required(login_url="/accounts/login/")
+# def profile(request):
+#     current_user = request.user
+#     profile = Profile.objects.filter(user_id=current_user.id).first()
+#     project = Project.objects.filter(user_id=current_user.id).all() 
+#     form=ProjectForm()
+#     return render(request, "profile.html", {"profile": profile, 'form':form,"project": project})    
+  
+
+def edit_profile(request):
+    current_user = request.user
+    if request.method == 'POST':
+        form = DetailsForm(request.POST, request.FILES)
+        if form.is_valid():
+                Profile.objects.filter(id=current_user.profile.id).update(bio=form.cleaned_data["bio"])
+                profile = Profile.objects.filter(id=current_user.profile.id).first()
+
                 profile.save()
-                return redirect('profile') 
+        return redirect('profile')
+
+    else:
+        form = DetailsForm()
+    
+    return render(request, 'update_profile.html',{"form": form})
+
+# @login_required(login_url='/accounts/login/')
+# def edit_profile(request,user_id):
+#     user = User.objects.get(id=user_id)
+#     profile = Profile.objects.get(user_id = user)
+#     form = DetailsForm(instance=profile)
+#     if request.method == "POST":
+#             form = DetailsForm(request.POST,request.FILES,instance=profile)
+#             if form.is_valid():  
+                
+#                 profile = form.save(commit=False)
+#                 profile.save()
+#                 return redirect('profile') 
             
-    form = DetailsForm()
-    return render(request, 'update_profile.html', {"form": form})    
+#     form = DetailsForm()
+#     return render(request, 'update_profile.html', {"form": form})    
 
 
 @login_required(login_url='/accounts/login/')
