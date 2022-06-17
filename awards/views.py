@@ -65,9 +65,9 @@ def profile(request):
 #     return render(request, 'update_profile.html',{"form": form})
 
 @login_required(login_url='/accounts/login/')
-def edit_profile(request,user_id):
+def edit_profile(request,id):
     user = User.objects.get(id=id)
-    profile = Profile.objects.get(user_id = user_id)
+    profile = Profile.objects.get(user_id = user)
     form = DetailsForm(instance=profile)
     if request.method == "POST":
             form = DetailsForm(request.POST,request.FILES,instance=profile)
