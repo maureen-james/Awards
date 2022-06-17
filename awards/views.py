@@ -30,10 +30,10 @@ def welcome(request):
             form=AddProjectForm()
     return render(request,'index.html',{'form':form,'projects':project})
 @login_required(login_url='/accounts/login/')
-def profile(request):
+def profile(request, user_id):
 
-    # current_user=get_object_or_404(User,id=user_id)
-    current_user = request.user
+    current_user=get_object_or_404(User,id=user_id)
+    # current_user = request.user
     projects = Project.objects.filter(user=current_user)
     profile = Profile.objects.filter(id = current_user.id).first()
     form=ProjectForm()
