@@ -40,7 +40,8 @@ def profile(request, user_id):
     return render(request, 'profile.html', {"projects": projects,'form':form, "profile": profile})
   
 
-def edit_profile(request):
+def edit_profile(request,user_id):
+    current_user=get_object_or_404(User,id=user_id)
     current_user = request.user
     if request.method == 'POST':
         form = DetailsForm(request.POST, request.FILES)
